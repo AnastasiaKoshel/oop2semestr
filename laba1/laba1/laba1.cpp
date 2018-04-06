@@ -10,7 +10,9 @@
 #include <stdio.h>
 #include <time.h>
 #include <iostream>
+#include<fstream>
 
+using namespace std;
 #define GL_BGR eaf5be
 #define pi (3.14)
 
@@ -37,13 +39,20 @@ int xpos, ypos;
 
 void init(void)
 {
-	pos_cube[0] = 1.0;
-	pos_cube[1] = 0.0;
-	pos_cube[2] = 1.0;
-	pos_elipse[0] = -1.0;
-	pos_elipse[1] = 0.0;
-	pos_elipse[2] = 0.0;
-
+	fstream f1("f1.txt");
+	for (int i = 0; i < 3; i++)
+	{
+		f1 >> pos_cube[i];
+	}
+	f1 >> angle_cube[0] >> angle_cube[1];
+	f1.close();
+	fstream f2("f2.txt");
+	for (int i = 0; i < 3; i++)
+	{
+		f2 >> pos_elipse[i];
+	}
+	f2 >> angle_elipse[0] >> angle_elipse[1];
+	f2.close();
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat mat_shininess[] = { 50.0 };
 	GLfloat light_position[] = { 20.2, 20.0, 30.0, 0.0 };
@@ -415,6 +424,27 @@ case 'a':
 		}
 	}
 	break;
+case 'u':
+           {
+	ofstream f1("f1.txt");
+	for (int i = 0; i < 3; i++)
+	{
+		f1 << pos_cube[i];
+	
+	}
+	f1 << angle_cube[0] << angle_cube[1];
+	f1.close();
+	ofstream f2("f2.txt");
+	for (int i = 0; i < 3; i++)
+	{
+		f2 << pos_elipse[i];
+
+	}
+	f2 << angle_elipse[0] << angle_elipse[1];
+	f2.close();
+	
+           }
+break;
 }
 }
 
@@ -469,6 +499,8 @@ void set_color()
 
 int main(int argc, char** argv)
 {
+	
+
 	set_color();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -480,11 +512,12 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(skeyboard);
 	glutReshapeFunc(reshape);
-
+	
+	
 	glutTimerFunc(25, timer_func, 0);
 
 	glutPassiveMotionFunc(mouse);
-
+	
 	glutMainLoop();
 	return 0;
 }
